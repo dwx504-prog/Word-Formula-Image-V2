@@ -1,13 +1,15 @@
-
-name: Build Windows EXE
+name: Build Windows EXE V2.1
 
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: windows-latest
-
+    timeout-minutes: 20
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -22,12 +24,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check Python syntax
+        run: python -m py_compile word_formula_to_image.py
+
       - name: Build EXE
         run: |
-          pyinstaller --noconfirm --clean --onefile --windowed --name "Word公式图片转换助手" word_formula_to_image.py
+          pyinstaller --noconfirm --clean --onefile --windowed --name "Word公式图片转换助手_V2_1" --hidden-import=pythoncom --hidden-import=pywintypes --hidden-import=win32timezone word_formula_to_image.py
+
+      - name: Verify EXE
+        shell: pwsh
+        run: |
+          if (!(Test-Path "dist/Word公式图片转换助手_V2_1.exe")) { throw "EXE 文件未生成" }
+          Get-Item "dist/Word公式图片转换助手_V2_1.exe" | Format-List Name,Length
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: Word公式图片转换助手-Windows
-          path: dist/Word公式图片转换助手.exe
+          name: Word公式图片转换助手-V2.1-Windows
+          path: dist/Word公式图片转换助手_V2_1.exe
+          if-no-files-found: error
+          retention-days: 30
