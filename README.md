@@ -1,45 +1,19 @@
-# Word公式图片转换助手 V2 完整项目
+# Word公式图片转换助手 V2.2
 
-## 项目文件
-- `word_formula_to_image.py`：软件主体
-- `requirements.txt`：编译依赖
-- `.github/workflows/build.yml`：GitHub 云端 Windows 编译流程
-- `README.md`、`使用说明.txt`：使用说明
+本版针对 V2.1 的“识别到公式但没有检测到图片”问题调整了 Word 自动化流程：使用 Word 当前选区复制公式为图片，优先粘贴增强型图元文件（EMF），并检查行内图片和浮动图片；只有确认图片存在且对应原公式对象数量减少后才计为成功。
 
-## 功能
-- 批量选择 DOCX 或添加整个文件夹
-- 通过 Windows 桌面版 Microsoft Word 自动化识别 Word 原生公式（OMath）
-- 将公式复制为 EMF 图片，在原位置插入
-- 检测到图片插入后才尝试删除原公式
-- 输出为新 DOCX，不覆盖原文件
-- 显示识别数、转换数、剩余公式数及异常
+## 重新上传
+将解压后的项目文件上传到 GitHub 仓库，覆盖旧版本文件，保持 `.github/workflows/build.yml` 目录结构。
 
-## 环境要求
-- Windows 10/11
-- 已安装桌面版 Microsoft Word
-- 输入文件为 DOCX
+## 编译
+1. 打开仓库 Actions。
+2. 选择 `Build Windows EXE V2.2`。
+3. 点击 `Run workflow`。
+4. 等待语法检查和 Build EXE 均通过。
+5. 在本次运行 Summary 页面下载 Artifacts：`Word公式图片转换助手-V2.2-Windows`。
 
-当前版本主要支持 Word 原生公式（OMath），不自动识别 MathType OLE、普通文本公式、公式截图或 PDF 中的公式。
+## 使用限制
+需要 Windows 10/11 和 Microsoft Word 桌面版。主要支持 DOCX 中的 Word 原生公式（OMath）。MathType、普通文本公式、公式截图及其他嵌入对象不保证支持。程序另存为新 DOCX，不覆盖源文件。建议先在文档副本上测试，并人工检查转换后的公式排版。
 
-## GitHub 云端编译（本机无需安装 Python）
-1. 在 GitHub 创建一个空仓库。
-2. 将 ZIP 解压，把解压目录里的**所有内容**上传到仓库根目录。
-3. 必须保留 `.github/workflows/build.yml` 这个目录结构。
-4. 打开仓库顶部 Actions。
-5. 左侧点击 `Build Windows EXE V2`。
-6. 点击 `Run workflow` 并确认。
-7. 成功后进入本次运行的 Summary 页面，滚动到页面底部的 Artifacts。
-8. 下载 `Word公式图片转换助手-V2-Windows`，解压后得到 `Word公式图片转换助手_V2.exe`。
-
-## 使用
-1. 双击 EXE。
-2. 添加一份或多份 DOCX，或选择文件夹。
-3. 设置输出目录。
-4. 点击开始转换。
-5. 在输出目录打开 `_公式转图片_V2.docx` 检查结果。
-
-## 重要说明
-- 请先用原文件副本测试，确认图片、公式位置和排版符合预期后再批量处理。
-- Office 自动化和剪贴板行为可能受 Word 版本、公式结构、文档保护和其他程序占用剪贴板影响。
-- 若某条公式不能确认图片插入位置，程序会尽量保留原公式，并在结果中报告异常；该文件应人工检查。
-- 转换时不要同时复制其他内容或操作 Word 剪贴板。
+## 关于本次上传的测试文档
+已检查 `01_权利要求书_系统修订版.docx` 的 DOCX 内部结构，确认其中有 41 个 OMML 公式对象，且主文档 XML 中没有现存图片或嵌入对象。该文件适合作为本软件的首个实测样本。
